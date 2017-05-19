@@ -3,26 +3,49 @@ use std;
 #[cfg(test)]
 mod test;
 
-pub struct Body {
-    pub mass: f32,
-    pub radius: f32
+pub trait Body {
+    fn mass(&self) -> f64;
+    fn radius(&self) -> f64;
+    
+    fn volume(&self) -> f64 {
+        4.0 * std::f64::consts::PI * self.radius().powf(3.0) / 3.0
+    }    
+
+    fn density(&self) -> f64 {
+        self.mass() / self.volume()
+    }
 }
+
 
 pub struct Star {
-    pub body: Body,
-    pub lumosity: f32,
+    pub _mass: f64,
+    pub _radius: f64,
+    pub lumosity: f32
 }
+
+impl Body for Star {
+    fn mass(&self) -> f64 {
+        self._mass
+    }
+
+    fn radius(&self) -> f64 {
+        self._radius
+    }
+}
+
 
 pub struct Planet {
-    pub body: Body
+    pub _mass: f64,
+    pub _radius: f64,
 }
 
-impl Body {
-    pub fn volume(&self) -> f32 {
-        4.0 * std::f32::consts::PI * self.radius.powf(3.0) / 3.0
+impl Body for Planet {
+    fn mass(&self) -> f64 {
+        self._mass
     }
 
-    pub fn density(&self) -> f32 {
-        self.mass / self.volume()
+    fn radius(&self) -> f64 {
+        self._radius
     }
 }
+
