@@ -1,5 +1,8 @@
 use std;
 
+#[cfg(test)]
+mod test;
+
 pub struct Body {
     pub mass: f32,
     pub radius: f32
