@@ -1,8 +1,6 @@
 use std;
 
-use celestial::Body;
-use celestial::Star;
-use celestial::Planet;
+use celestial::{Body,Star,Planet};
 
 #[test]
 fn test_volume() {
