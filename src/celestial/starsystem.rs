@@ -33,7 +33,10 @@ impl StarSystem {
     /**
      * Create a empty StarSystem with T-body as main_body
      */
-    pub fn new(root: Box<Body>) -> StarSystem {
+    pub fn new<T: Body + 'static>(root: T) -> StarSystem {
+        StarSystem::new_from_box(Box::new(root))
+    }
+    pub fn new_from_box(root: Box<Body>) -> StarSystem {
         StarSystem {
             main_body: Orbiter{
                 body: root, 
@@ -41,7 +44,20 @@ impl StarSystem {
                 sats: vec![]
             }
         }
+    }  
+
+    pub fn getMainBody(&self) -> &Body {
+        self.main_body.getBody()
     }
+
+    pub fn getRootOrbit(&mut self) -> &mut Orbiter {
+        &mut self.main_body
+    }
+
+    pub fn getNumSats(&self) -> usize {
+        self.main_body.getNumSats()
+    }
+
 }
 
 impl Orbiter {
@@ -59,4 +75,15 @@ impl Orbiter {
         self.sats.last().unwrap()
     }
 
+    pub fn getBody(&self) -> &Body {
+        self.body.as_ref()
+    }
+
+    pub fn getNumSats(&self) -> usize {
+        self.sats.len()
+    }
+
+    pub fn getSat(&self, i: usize) -> &Orbiter {
+        self.sats[i].as_ref()
+    }
 }
