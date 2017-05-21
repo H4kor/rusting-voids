@@ -9,11 +9,12 @@ use std::io::{self, Read, Write};
 use std::iter::Iterator;
 
 use game::display::Display;
-
+use game::universe::Universe;
 
 
 pub struct Looper<R, W: Write> {
     pub disp: Display<W>,
+    pub uni: Universe,
     pub stdin: R
 }
 
@@ -30,6 +31,7 @@ impl<R: Iterator<Item=Result<Key, std::io::Error>>, W: Write> Looper<R, W> {
             }
             self.disp.clear();
             self.disp.render_border();
+            self.disp.list_system(self.uni.getSystem(0));
             self.disp.flush();
         }
     }

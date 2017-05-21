@@ -3,6 +3,8 @@ extern crate termion;
 use std::io::{Read, Write};
 use termion::{color, style, cursor, clear};
 
+use celestial::starsystem::StarSystem;
+
 pub struct Display<W: Write> {
     pub o: W,
     pub width: u16,
@@ -71,5 +73,14 @@ impl<W: Write> Display<W> {
         self.place("╝", w, h);
 
         self.goto(1,1);
+    }
+
+    pub fn list_system(&mut self, sys: &mut StarSystem) {
+        self.place(&sys.getMainBody().short_desc()[..], 2, 2);    
+        let n = sys.getNumSats();
+        for sat in 0..n {
+            let sat_body = sys.getRootOrbit().getSat(sat).getBody();
+            self.place( &sat_body.short_desc()[..], 6, 3+(sat as u16));
+        }
     }
 }

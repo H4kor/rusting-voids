@@ -1,3 +1,5 @@
+extern crate rand;
+
 use std;
 
 use celestial::bodies::Body;
@@ -14,6 +16,14 @@ pub enum OrbitData {
     }
 }
 
+impl OrbitData {
+    pub fn generate_for<S: Body,P: Body>(star: &S, Planet: &P) -> OrbitData {
+        let a = rand::random::<f64>() % 1.0;
+        let e = rand::random::<f64>() % 1.0;
+        let i = rand::random::<f64>() % 1.0;
+        OrbitData::Bound{a: a, e: e, i: i}
+    }
+}
 
 pub struct Orbiter {
     /// the body orbiting

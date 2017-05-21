@@ -6,3 +6,4 @@ authors = ["Niko Abeler <me@h4kor.de>"]
 
 [dependencies]
 termion = "*"
+rand = "*"

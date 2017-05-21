@@ -13,7 +13,7 @@ use celestial::starsystem::OrbitData;
 
 use game::display::Display;
 use game::looper::Looper;
-
+use game::universe::Universe;
 
 fn init<W: Write, R: Read>(mut stdout: W, stdin: R, width: u16, height: u16) {
     //clear the screen
@@ -22,7 +22,7 @@ fn init<W: Write, R: Read>(mut stdout: W, stdin: R, width: u16, height: u16) {
 
     let mut looper= Looper {
         disp: Display::new(stdout, width, height),
-        //disp: Display::new(stdout, 40, 20),
+        uni: Universe::generate(),
         stdin: stdin.keys()
     };
 
