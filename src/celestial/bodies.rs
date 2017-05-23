@@ -2,6 +2,7 @@ extern crate rand;
 
 use std;
 use std::string::String;
+use units::lens::L;
 
 pub trait Body {
     fn mass(&self) -> f64;
