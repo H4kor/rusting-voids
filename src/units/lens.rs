@@ -3,6 +3,8 @@ use std::ops::{Add, Sub, Mul, Div};
 use units::ConvertibleUnit;
 use units::UnitValue;
 
+
+/// Units used to denote lenghts in the game
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
 pub enum LU{
     mm,

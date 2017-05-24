@@ -1,13 +1,21 @@
+//! Module to handle all physical measurements and units.
+
 #[cfg(test)]
 mod test;
 
 use std::ops::{Add, Sub, Mul, Div};
 
-trait ConvertibleUnit: PartialEq + Eq + PartialOrd + Ord + Copy {
+/// Used to implement conversion between different scalars.
+/// E.g. convert from meter to light seconds
+pub trait ConvertibleUnit: PartialEq + Eq + PartialOrd + Ord + Copy {
+    /// returns factor and next bigger scalar
     fn up(&self) -> (f64, Self);
+    /// returns factor and next smaller scalar
     fn down(&self) -> (f64, Self);
 }
 
+/// Allows construction of measurements via multiplaction.
+/// E.g `let a = 1.0 * LU::m;` for 1 meter
 #[macro_export]
 macro_rules! unit_construction {
     ($u:ident, $v:ident) => {
@@ -20,16 +28,23 @@ macro_rules! unit_construction {
     }
 }
 
-trait UnitValue<U: ConvertibleUnit> where Self: Sized{
+/// Basis implementation of measurements.
+/// Allows conversion between scalars.
+pub trait UnitValue<U: ConvertibleUnit> where Self: Sized{
 
+    /// creates measurement for given value and scalar
     fn new(v: f64, u: U) -> Self where Self: Sized;
+    /// returns scalar of the measurement
     fn unit(&self) -> &U;
+    /// returns value of the measurement
     fn value(&self) -> f64;
     
+    /// converts measurement to the given scalar
     fn cvt_to(self, nu: U) -> Self where Self: Sized {
         UnitValue::_cvt_to(&nu, self.unit(), self.value())
     }
-
+    
+    /// internal function to realize ``cvt_to``
     fn  _cvt_to(goal: &U, cur: &U, val: f64) -> Self where Self: Sized {
         if cur < goal {
             let (fac, next) = cur.up();
@@ -43,6 +58,8 @@ trait UnitValue<U: ConvertibleUnit> where Self: Sized{
     }
 }
 
+/// Basic arithmetic for measurements.
+/// Implements addition and substraction.
 #[macro_export]
 macro_rules! unit_arithmetic {
     ($x:ident) => {    

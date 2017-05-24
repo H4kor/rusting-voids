@@ -1,7 +1,7 @@
 extern crate termion;
-mod celestial;
-mod game;
-mod units;
+pub mod celestial;
+pub mod game;
+pub mod units;
 
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
