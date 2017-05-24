@@ -1,5 +1,9 @@
 
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
+use std::ops::{Add, Sub, Mul, Div};
+use units::ConvertibleUnit;
+use units::UnitValue;
+
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
 pub enum LU{
     mm,
     cm,
@@ -13,9 +17,9 @@ pub enum LU{
     lyear,
 }
 
-impl LU{
-    fn greater(self) -> (f64, LU) {
-        match self {
+impl ConvertibleUnit for LU{
+    fn up(&self) -> (f64, LU) {
+        match *self {
             LU::mm    => (0.1, LU::cm),
             LU::cm    => (0.1, LU::dm),
             LU::dm    => (0.1, LU::m),
@@ -30,8 +34,8 @@ impl LU{
         }
     }
 
-    fn smaller(self) -> (f64, LU) {
-        match self {
+    fn down(&self) -> (f64, LU) {
+        match *self {
             LU::mm    => panic!("mm is the smallest L Unit"),
             LU::cm    => (10., LU::mm),
             LU::dm    => (10., LU::cm),
@@ -47,33 +51,31 @@ impl LU{
     }
 }
 
+impl Add<LU> for f64 {
+    type Output = L;
+
+    fn  add(self, rhs: LU) -> L {
+        L{v: self, u: rhs}
+    }
+
+}
+
 pub struct L{
     pub v: f64,
     pub u: LU
 }
 
-impl L {
-    pub fn new(v: f64, u: LU) -> L {
+impl UnitValue<LU> for L {
+    fn new(v: f64, u: LU) -> L {
         L{v: v, u: u}
     }
-
-    pub fn convert_to(self, nu: LU) -> L {
-        L::_convert_to(nu, self.u, self.v) 
+    fn unit(&self) -> &LU {
+        &self.u
     }
-
-    fn _convert_to(goal: LU, cur: LU, val: f64) -> L {
-        if cur < goal {
-            let (fac, next) = cur.greater();
-            return L::_convert_to(goal, next, fac * val)
-        }
-        if cur > goal {
-            let (fac, next) = cur.smaller();
-            return L::_convert_to(goal, next, fac * val)
-        }
-
-        L{
-            v: val,
-            u: cur
-        }
+    fn value(&self) -> f64 {
+        self.v
     }
 }
+
+unit_arithmetic!(L);
+unit_construction!(LU, L);
