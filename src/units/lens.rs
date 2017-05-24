@@ -51,14 +51,14 @@ impl ConvertibleUnit for LU{
     }
 }
 
-impl Add<LU> for f64 {
-    type Output = L;
-
-    fn  add(self, rhs: LU) -> L {
-        L{v: self, u: rhs}
-    }
-
-}
+//impl Add<LU> for f64 {
+//    type Output = L;
+//
+//    fn  add(self, rhs: LU) -> L {
+//        L{v: self, u: rhs}
+//    }
+//
+//}
 
 pub struct L{
     pub v: f64,

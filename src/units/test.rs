@@ -1,5 +1,6 @@
 
 use units::lens::{LU, L};
+use units::masses::{MU, M};
 use units::UnitValue;
 
 #[test]
@@ -29,6 +30,8 @@ fn test_conversion() {
     let one_ly = L{v: 1.0, u: LU::lyear};
     assert!((one_ly.cvt_to(LU::mm).cvt_to(LU::lyear).v - 1.0).abs() < 1e-10); 
 
+    let one_sm = 1.0 * MU::sun_mass;
+    assert!((one_sm.cvt_to(MU::mg).cvt_to(MU::sun_mass).v - 1.0).abs() < 1e-10);
 }
 
 #[test]
