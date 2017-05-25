@@ -25,7 +25,8 @@ fn init<W: Write, R: Read>(mut stdout: W, stdin: R, width: u16, height: u16) {
     let mut looper= Looper {
         disp: Display::new(stdout, width, height),
         uni: Universe::generate(),
-        stdin: stdin.keys()
+        stdin: stdin.keys(),
+        disp_system: 0
     };
 
     looper.start();

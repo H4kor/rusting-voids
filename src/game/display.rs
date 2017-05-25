@@ -26,7 +26,7 @@ impl<W: Write> Display<W> {
         write!(self.o, "{}", cursor::Goto(x,y)).unwrap();
     }
 
-    fn place(&mut self, text: &str, x: u16, y: u16) {
+    pub fn place(&mut self, text: &str, x: u16, y: u16) {
         self.goto(x,y);
         write!(self.o, "{}", text);
     }

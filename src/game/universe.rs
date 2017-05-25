@@ -35,6 +35,10 @@ impl Universe {
         // return Universe
         u
     }
+    
+    pub fn numSystems(&self) -> usize {
+        self.systems.len()
+    }
 
     pub fn getSystem(&mut self, i: usize) -> &mut StarSystem {
         self.systems.get_mut(i).unwrap()
