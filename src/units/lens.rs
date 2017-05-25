@@ -1,5 +1,6 @@
 
 use std::ops::{Add, Sub, Mul, Div};
+use std::fmt;
 use units::ConvertibleUnit;
 use units::UnitValue;
 
@@ -17,6 +18,25 @@ pub enum LU{
     lhour,
     lday,
     lyear,
+}
+
+impl fmt::Display for LU {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let u_str = match *self {
+            LU::mm    => "mm", 
+            LU::cm    => "cm",
+            LU::dm    => "dm",
+            LU::m     => "m",
+            LU::km    => "km",
+            LU::lsec  => "light seconds",
+            LU::lmin  => "light minutes",
+            LU::lhour => "light hour",
+            LU::lday  => "light day",
+            LU::lyear => "light year",
+            _ => panic!("L unknown")
+        };
+        write!(f, "{}", u_str)
+    }
 }
 
 impl ConvertibleUnit for LU{
@@ -53,15 +73,7 @@ impl ConvertibleUnit for LU{
     }
 }
 
-//impl Add<LU> for f64 {
-//    type Output = L;
-//
-//    fn  add(self, rhs: LU) -> L {
-//        L{v: self, u: rhs}
-//    }
-//
-//}
-
+#[derive(Clone, Copy)]
 pub struct L{
     pub v: f64,
     pub u: LU
@@ -81,3 +93,4 @@ impl UnitValue<LU> for L {
 
 unit_arithmetic!(L);
 unit_construction!(LU, L);
+unit_disply!(L);

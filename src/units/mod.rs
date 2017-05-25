@@ -4,10 +4,11 @@
 mod test;
 
 use std::ops::{Add, Sub, Mul, Div};
+use std::fmt::Display;
 
 /// Used to implement conversion between different scalars.
 /// E.g. convert from meter to light seconds
-pub trait ConvertibleUnit: PartialEq + Eq + PartialOrd + Ord + Copy {
+pub trait ConvertibleUnit: PartialEq + Eq + PartialOrd + Ord + Copy + Display {
     /// returns factor and next bigger scalar
     fn up(&self) -> (f64, Self);
     /// returns factor and next smaller scalar
@@ -30,7 +31,7 @@ macro_rules! unit_construction {
 
 /// Basis implementation of measurements.
 /// Allows conversion between scalars.
-pub trait UnitValue<U: ConvertibleUnit> where Self: Sized{
+pub trait UnitValue<U: ConvertibleUnit>: Clone + Copy where Self: Sized{
 
     /// creates measurement for given value and scalar
     fn new(v: f64, u: U) -> Self where Self: Sized;
@@ -90,6 +91,16 @@ macro_rules! unit_arithmetic {
                     let conv = rhs.cvt_to(*self.unit());
                     $x::new(self.value() - conv.value(), *conv.unit())
                 }
+            }
+        }
+    }
+}
+
+macro_rules! unit_disply {
+    ($x:ident) => {
+        impl fmt::Display for $x {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                write!(f, "{:.4e} {}", self.value(), self.unit())
             }
         }
     }

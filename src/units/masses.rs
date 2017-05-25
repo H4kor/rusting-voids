@@ -1,5 +1,6 @@
 
 use std::ops::{Add, Sub, Mul, Div};
+use std::fmt;
 use units::ConvertibleUnit;
 use units::UnitValue;
 
@@ -16,6 +17,23 @@ pub enum MU {
     earth_mass,
     jupiter_mass,
     sun_mass
+}
+
+impl fmt::Display for MU {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let u_str = match *self {
+            MU::mg           => "mg", 
+            MU::g            => "g",
+            MU::kg           => "kg",
+            MU::tons         => "t",
+            MU::ktons        => "kt",
+            MU::mtons        => "mt",
+            MU::earth_mass   => "EM",
+            MU::jupiter_mass => "JM",
+            MU::sun_mass     => "SM"
+        };
+        write!(f, "{}", u_str)
+    }
 }
 
 impl ConvertibleUnit for MU{
@@ -50,6 +68,7 @@ impl ConvertibleUnit for MU{
     }
 }
 
+#[derive(Clone, Copy)]
 pub struct M{
     pub v: f64,
     pub u: MU
@@ -69,3 +88,4 @@ impl UnitValue<MU> for M {
 
 unit_arithmetic!(M);
 unit_construction!(MU, M);
+unit_disply!(M);
