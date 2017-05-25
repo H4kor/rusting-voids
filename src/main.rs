@@ -2,6 +2,7 @@ extern crate termion;
 pub mod celestial;
 pub mod game;
 pub mod units;
+pub mod utils;
 
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;

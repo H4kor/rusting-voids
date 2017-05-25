@@ -93,6 +93,13 @@ macro_rules! unit_arithmetic {
                 }
             }
         }
+
+        impl Mul<$x> for f64 {
+            type Output = $x;
+            fn mul(self, rhs: $x) -> $x {
+                $x::new(self * rhs.value(), *rhs.unit())
+            }
+        }
     }
 }
 

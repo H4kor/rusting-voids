@@ -2,6 +2,9 @@ extern crate rand;
 
 use std;
 use std::string::String;
+
+use utils::{randomMass, randomLength};
+
 use units::UnitValue;
 use units::lens::L;
 use units::lens::LU::{km, lsec};
@@ -35,8 +38,8 @@ pub struct Star {
 impl Star {
     //c'tor
     pub fn new() -> Star {
-        let r = 3.0e7 * km;
-        let m = 1.0 * sun_mass;
+        let r = randomLength(0.1 * 695700.0 * km, 100.0 * 695700.0 * km);
+        let m = randomMass(0.1 * sun_mass, 100.0 * sun_mass);
         let l = 1.0;
         Star{ _mass: m, _radius: r, lumosity: l}
     }
@@ -76,10 +79,9 @@ impl Planet {
     }
     
     pub fn generate_for<S: Body>(star: &S) -> Planet {
-        let m = (rand::random::<f64>() % (star.mass().cvt_to(earth_mass).v / 100.0)) * earth_mass;
-        let r = (rand::random::<f64>() % m.v) * km;
-        
-
+        let m = randomMass(0.0001 * star.mass(), 0.01 * star.mass());
+        //between moon and jupiter
+        let r = randomLength(3390.0 * km, 69911.0 * km);
         Planet { _mass: m, _radius: r}
     }
 
