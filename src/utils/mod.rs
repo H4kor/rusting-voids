@@ -1,5 +1,7 @@
 extern crate rand;
 
+pub mod time;
+
 use units::masses::M;
 use units::lens::L;
 use units::UnitValue;

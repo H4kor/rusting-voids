@@ -3,6 +3,7 @@ pub mod celestial;
 pub mod game;
 pub mod units;
 pub mod utils;
+pub mod ship;
 
 use termion::input::TermRead;
 use termion::raw::IntoRawMode;
@@ -10,12 +11,16 @@ use termion::event::Key;
 
 use std::io::{self, Read, Write};
 
+use utils::time::Time;
+
 use celestial::bodies::{Body, Star, Planet};
 use celestial::starsystem::OrbitData;
 
 use game::display::Display;
 use game::looper::Looper;
 use game::universe::Universe;
+
+use ship::core::ShipCore;
 
 fn init<W: Write, R: Read>(mut stdout: W, stdin: R, width: u16, height: u16) {
     //clear the screen
@@ -26,7 +31,9 @@ fn init<W: Write, R: Read>(mut stdout: W, stdin: R, width: u16, height: u16) {
         disp: Display::new(stdout, width, height),
         uni: Universe::generate(),
         stdin: stdin.keys(),
-        disp_system: 0
+        disp_system: 0,
+        ship: ShipCore::new(),
+        time: Time{ total: 0.0, delta: 0.0 }
     };
 
     looper.start();
