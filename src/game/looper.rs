@@ -11,7 +11,7 @@ use std::iter::Iterator;
 
 use utils::time::Time;
 
-use game::display::Display;
+use game::display::{Display, DisplayList, DisplayListItem};
 use game::universe::Universe;
 
 use ship::core::ShipCore;
@@ -97,14 +97,26 @@ impl<R: Iterator<Item=Result<Key, std::io::Error>>, W: Write> Looper<R, W> {
     fn viewSystemView(&mut self) {
         self.disp.clear();
         self.disp.render_border();
-        self.disp.place(format!("System: {}", self.disp_system).as_str(), 1, 1);
-        self.disp.list_system(self.uni.getSystem(self.disp_system));
+        self.disp.set_title(format!("System: {}", self.disp_system).as_str());
+        
+        let sys = self.uni.getSystem(self.disp_system);
+        let mut list = DisplayList::new();
+        let k = list.add(sys.getMainBody().short_desc());
+        for i in 0..sys.getNumSats() {
+            let body = sys.getRootOrbit().getSat(i).getBody();
+            let mut sub = list.addTo(k, body.short_desc());
+            sub.add(format!("Mass: {}", body.mass()));    
+            sub.add(format!("Radius: {}", body.radius()));    
+        }
+        self.disp.print_list(list);
+
+        //self.disp.list_system(self.uni.getSystem(self.disp_system));
      }
 
     fn viewShipView(&mut self) {
         self.disp.clear();
         self.disp.render_border();
-        self.disp.place("Ship Details:", 1, 1); 
+        self.disp.set_title("Ship Details"); 
         self.disp.place("The ship is completely dark.", 3, 3);    
     }
 }

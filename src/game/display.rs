@@ -1,9 +1,53 @@
 extern crate termion;
 
+use std::vec::Vec;
 use std::io::{Read, Write};
 use termion::{color, style, cursor, clear};
 
 use celestial::starsystem::StarSystem;
+
+
+pub struct DisplayListItem {
+    pub item: String,
+    pub subitems: Vec<DisplayListItem>,
+}
+
+impl DisplayListItem {
+    pub fn add(&mut self, item: String) -> usize {
+        self.subitems.push(DisplayListItem{
+            item: item,
+            subitems: vec!()
+        });
+        self.subitems.len() - 1
+    }
+}
+
+pub struct DisplayList {
+    pub items: Vec<DisplayListItem>,
+}
+
+impl DisplayList {
+    pub fn new() -> DisplayList {
+        DisplayList{items: vec!()}
+    }
+
+    pub fn add(&mut self, item: String) -> usize {
+        self.items.push(DisplayListItem{
+            item: item,
+            subitems: vec!()
+        });
+        self.items.len() - 1
+
+    }
+
+    pub fn addTo(&mut self, k: usize, item: String) -> &mut DisplayListItem {
+        self.items[k].subitems.push(DisplayListItem{
+            item: item,
+            subitems: vec!()
+        });
+        self.items[k].subitems.last_mut().unwrap()
+    }
+}
 
 pub struct Display<W: Write> {
     pub o: W,
@@ -75,12 +119,37 @@ impl<W: Write> Display<W> {
         self.goto(1,1);
     }
 
-    pub fn list_system(&mut self, sys: &mut StarSystem) {
-        self.place(&sys.getMainBody().short_desc()[..], 2, 2);    
-        let n = sys.getNumSats();
-        for sat in 0..n {
-            let sat_body = sys.getRootOrbit().getSat(sat).getBody();
-            self.place( &sat_body.short_desc()[..], 6, 3+(sat as u16));
+    pub fn set_title(&mut self, title: &str) {
+        //decorate
+        let f_title = format!("╡{}{}   {}   {}{}╞", 
+                              color::Bg(color::Blue), color::Fg(color::Black), 
+                              title, 
+                              color::Bg(color::Reset), color::Fg(color::Reset)
+                             );
+        //compute positions
+        let len = f_title.len() as u16;
+        let center: u16 = self.width/2;
+        let start  = center - len/2;
+        
+        let start = 10;
+        self.place(f_title.as_str(), start, 1);
+    }
+
+    pub fn print_list(&mut self, list: DisplayList) {
+        self._print_list(list.items, 2, 3);
+    }    
+    fn _print_list(&mut self, list: Vec<DisplayListItem>, intend: u16, line: u16) -> u16 {
+        // how much to increase with each sub list
+        let inc = 4;
+        let x = intend;
+        let mut y = line;
+        
+        for item in list {
+            self.place(item.item.as_str(), intend, y);
+            y += 1;
+            y = self._print_list(item.subitems, intend + inc, y);
         }
+        
+        y
     }
 }

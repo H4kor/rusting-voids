@@ -97,11 +97,7 @@ impl Body for Planet {
     }
     
     fn short_desc(&self) -> String {
-        format!("Planet: Mass: {:.4}, Radius: {:.4}", 
-            self.mass(),
-            self.radius()
-        )
-    
+        format!("Planet:")    
     }
 }
 
