@@ -37,6 +37,13 @@ impl fmt::Display for MU {
 }
 
 impl ConvertibleUnit for MU{
+    fn min() -> MU {
+        MU::mg
+    }
+    fn max() -> MU {
+        MU::sun_mass
+    }
+
     fn up(&self) -> (f64, MU) {
         match *self {
             MU::mg           => (0.001, MU::g),
@@ -47,14 +54,14 @@ impl ConvertibleUnit for MU{
             MU::mtons        => (1.673360107095e-16,MU::earth_mass),
             MU::earth_mass   => (0.00314635457, MU::jupiter_mass),
             MU::jupiter_mass => (0.00095459925, MU::sun_mass),
-            MU::sun_mass     => panic!("Sun Mass is the biggest M Unit"),
+            MU::sun_mass     => (1.0, MU::sun_mass),
             _ => panic!("No conversion known")
         }
     }
 
     fn down(&self) -> (f64, MU) {
         match *self {
-            MU::mg           => panic!("mg is the smallest M Unit"),
+            MU::mg           => (1.0, MU::mg),
             MU::g            => (1000.0, MU::mg ),
             MU::kg           => (1000.0, MU::g ),
             MU::tons         => (1000.0, MU::kg ),

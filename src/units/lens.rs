@@ -40,6 +40,12 @@ impl fmt::Display for LU {
 }
 
 impl ConvertibleUnit for LU{
+    fn min() -> LU {
+        LU::mm
+    }
+    fn max() -> LU {
+        LU::lyear
+    }
     fn up(&self) -> (f64, LU) {
         match *self {
             LU::mm    => (0.1, LU::cm),
@@ -51,14 +57,14 @@ impl ConvertibleUnit for LU{
             LU::lmin  => (1./60., LU::lhour),
             LU::lhour => (1./24., LU::lday),
             LU::lday  => (1./360., LU::lyear),
-            LU::lyear => panic!("Light Year is the biggest L Unit"),
+            LU::lyear => (1.0, LU::lyear),
             _ => panic!("L unknown")
         }
     }
 
     fn down(&self) -> (f64, LU) {
         match *self {
-            LU::mm    => panic!("mm is the smallest L Unit"),
+            LU::mm    => (1.0, LU::mm),
             LU::cm    => (10., LU::mm),
             LU::dm    => (10., LU::cm),
             LU::m     => (10., LU::dm),

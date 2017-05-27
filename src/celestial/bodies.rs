@@ -79,7 +79,7 @@ impl Planet {
     }
     
     pub fn generate_for<S: Body>(star: &S) -> Planet {
-        let m = randomMass(0.0001 * star.mass(), 0.01 * star.mass());
+        let m = randomMass(1e-15 * star.mass(), 1e-6 * star.mass());
         //between moon and jupiter
         let r = randomLength(3390.0 * km, 69911.0 * km);
         Planet { _mass: m, _radius: r}

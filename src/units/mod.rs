@@ -9,6 +9,9 @@ use std::fmt::Display;
 /// Used to implement conversion between different scalars.
 /// E.g. convert from meter to light seconds
 pub trait ConvertibleUnit: PartialEq + Eq + PartialOrd + Ord + Copy + Display {
+    fn min() -> Self;
+    fn max() -> Self;
+    
     /// returns factor and next bigger scalar
     fn up(&self) -> (f64, Self);
     /// returns factor and next smaller scalar
@@ -39,7 +42,26 @@ pub trait UnitValue<U: ConvertibleUnit>: Clone + Copy where Self: Sized{
     fn unit(&self) -> &U;
     /// returns value of the measurement
     fn value(&self) -> f64;
-    
+   
+    /// converts the measurement to the optimal scalar
+    fn cvt_to_opt(& self) -> Self {
+        if self.value() > 10.0 && *self.unit() != U::max() {
+            let (s, nu) = self.unit().up();
+            let n = &mut Self::new(self.value() * s, nu);
+            if n.value() > 1.0 {
+                return n.cvt_to_opt()
+            }   
+        }
+        if self.value() < 1.0 && *self.unit() != U::min() {
+            let (s, nu) = self.unit().down();
+            let n = &mut Self::new(self.value() * s, nu);
+            if n.value() < 10.0 {
+                return n.cvt_to_opt()
+            }
+        }
+        *self
+    }
+
     /// converts measurement to the given scalar
     fn cvt_to(self, nu: U) -> Self where Self: Sized {
         UnitValue::_cvt_to(&nu, self.unit(), self.value())
@@ -107,7 +129,8 @@ macro_rules! unit_disply {
     ($x:ident) => {
         impl fmt::Display for $x {
             fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                write!(f, "{:.4e} {}", self.value(), self.unit())
+                let cvt = self.cvt_to_opt();
+                write!(f, "{:.4e} {}", cvt.value(), cvt.unit())
             }
         }
     }
