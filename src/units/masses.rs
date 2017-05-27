@@ -22,15 +22,15 @@ pub enum MU {
 impl fmt::Display for MU {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let u_str = match *self {
-            MU::mg           => "mg", 
-            MU::g            => "g",
-            MU::kg           => "kg",
-            MU::tons         => "t",
-            MU::ktons        => "kt",
-            MU::mtons        => "mt",
-            MU::earth_mass   => "EM",
-            MU::jupiter_mass => "JM",
-            MU::sun_mass     => "SM"
+            MU::mg           => "Milli Gram", 
+            MU::g            => "Gram",
+            MU::kg           => "Kilo Gram",
+            MU::tons         => "Tons",
+            MU::ktons        => "Kilo Tons",
+            MU::mtons        => "Mega Tons",
+            MU::earth_mass   => "Planetary Masses",
+            MU::jupiter_mass => "Gas Giant Masses",
+            MU::sun_mass     => "Star Masses"
         };
         write!(f, "{}", u_str)
     }

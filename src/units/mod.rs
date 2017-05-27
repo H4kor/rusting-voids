@@ -45,7 +45,7 @@ pub trait UnitValue<U: ConvertibleUnit>: Clone + Copy where Self: Sized{
    
     /// converts the measurement to the optimal scalar
     fn cvt_to_opt(& self) -> Self {
-        if self.value() > 10.0 && *self.unit() != U::max() {
+        if self.value() > 1.0 && *self.unit() != U::max() {
             let (s, nu) = self.unit().up();
             let n = &mut Self::new(self.value() * s, nu);
             if n.value() > 1.0 {
@@ -130,7 +130,7 @@ macro_rules! unit_disply {
         impl fmt::Display for $x {
             fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
                 let cvt = self.cvt_to_opt();
-                write!(f, "{:.4e} {}", cvt.value(), cvt.unit())
+                write!(f, "{:.4} {}", cvt.value(), cvt.unit())
             }
         }
     }

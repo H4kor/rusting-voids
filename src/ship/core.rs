@@ -2,12 +2,12 @@
 use std::vec::Vec;
 use std::borrow::BorrowMut;
 use std::ops::DerefMut;
-use ship::component::Component;
+use ship::component::ShipComponent;
 
 use utils::time::Time;
 
 pub struct ShipCore {
-    comps: Vec<Box<Component>>,
+    comps: Vec<Box<ShipComponent>>,
 }
 
 impl ShipCore {
@@ -23,11 +23,21 @@ impl ShipCore {
         }
     }
 
+    pub fn power(&self) -> f64 {
+        // basic power supply
+        let mut p = 10.0;
+        for comp in &self.comps {
+            p += comp.as_ref().power_mod()
+        }
+        p
+    }
+    
     fn getNumComps(&self) -> usize {
         self.comps.len()
     }
 
-    fn getCompByPos(&mut self, i: usize) -> &mut Component {
+    fn getCompByPos(&mut self, i: usize) -> &mut ShipComponent {
         self.comps[i].deref_mut() 
     }
+
 }

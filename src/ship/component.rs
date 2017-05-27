@@ -1,9 +1,13 @@
 
 use std;
 use std::string::String;
+
 use utils::time::Time;
 
-pub trait Component {
+use ship::inventory::Inventory;
+
+
+pub trait ShipComponent {
     /// returns a one line description of the component
     fn short_desc(&self) -> String;
 
@@ -14,4 +18,23 @@ pub trait Component {
 
     /// executes temporal actions 
     fn timestep(&mut self, t: &Time);
+}
+
+struct CargoBay {
+    inv: Inventory,
+}
+
+impl ShipComponent for CargoBay {
+    
+    fn short_desc(&self) -> String {
+        format!("CargoBay")
+    }
+
+    fn power_mod(&self) -> f64 {
+        0.0
+    }
+
+    fn timestep(&mut self, t: &Time) {
+
+    }
 }

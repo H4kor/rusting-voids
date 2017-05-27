@@ -17,7 +17,7 @@ use celestial::bodies::{Body, Star, Planet};
 use celestial::starsystem::OrbitData;
 
 use game::display::Display;
-use game::looper::Looper;
+use game::looper::{LooperMode, Looper};
 use game::universe::Universe;
 
 use ship::core::ShipCore;
@@ -33,7 +33,8 @@ fn init<W: Write, R: Read>(mut stdout: W, stdin: R, width: u16, height: u16) {
         stdin: stdin.keys(),
         disp_system: 0,
         ship: ShipCore::new(),
-        time: Time{ total: 0.0, delta: 0.0 }
+        time: Time{ total: 0.0, delta: 0.0 },
+        mode: LooperMode::SystemView
     };
 
     looper.start();
