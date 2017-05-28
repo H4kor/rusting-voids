@@ -121,10 +121,10 @@ impl<W: Write> Display<W> {
 
     pub fn set_title(&mut self, title: &str) {
         //decorate
-        let f_title = format!("╡{}{}   {}   {}{}╞", 
-                              color::Bg(color::Blue), color::Fg(color::Black), 
+        let f_title = format!("╡{}   {}   {}╞", 
+                              color::FBg(color::Black, color::Blue), 
                               title, 
-                              color::Bg(color::Reset), color::Fg(color::Reset)
+                              color::FBg(color::Reset, color::Reset)
                              );
         //compute positions
         let len = f_title.len() as u16;

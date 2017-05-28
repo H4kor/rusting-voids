@@ -5,5 +5,5 @@ version = "0.0.1"
 authors = ["Niko Abeler <me@h4kor.de>"]
 
 [dependencies]
-termion = "*"
+termion = { git = "https://github.com/H4kor/termion" }
 rand = "*"
